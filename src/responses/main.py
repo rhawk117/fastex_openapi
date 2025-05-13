@@ -1,3 +1,4 @@
+from fastapi import FastAPI
 from ._registry import _Registry
 from pydantic import BaseModel
 from typing import Any, Dict, Optional, Type, TypedDict
@@ -25,6 +26,7 @@ def _make_response(
 
 def set_openapi_responses(
     *,
+    app: FastAPI,
     default_error_model: Type[BaseModel],
     validation_error_model: Optional[Type[BaseModel]] = None,
 ) -> None:
@@ -33,6 +35,15 @@ def set_openapi_responses(
         default_error_model=default_error_model,
         validation_error_model=validation_error_model,
     )
+    
+    response_overrides = {
+        400: default_error_model
+    }
+    
+    if validation_error_model:
+        response_overrides[422] = validation_error_model
+    
+    app.router.responses = response_overrides # type: ignore
 
 
 
@@ -92,3 +103,4 @@ def response_list(
                 raise ValueError(f"Duplicate response for status {code}")
             merged[code] = spec
     return merged
+
