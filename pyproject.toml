@@ -1,7 +1,7 @@
 [project]
 name = "fastex-openapi"
 version = "0.1.0"
-description = "Add your description here"
+description = "A utility package for documenting FastAPI route responses and working with OpenAPI in FastAPI."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
